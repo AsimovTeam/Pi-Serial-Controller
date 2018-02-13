@@ -31,16 +31,17 @@ public class Main {
                 BufferedReader inputBuffer = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 System.out.println("Read buffer initalized");
 
-                while(client.isConnected()) {
-
-                    System.out.println("Waiting for an input");
-                    System.out.println(inputBuffer.readLine());
+                while(client != null) {
 
                     //Dans l'éventualité que le client ferme le serveur textuellement
                     if(inputBuffer.readLine().equals("close")) {
-
+                        System.out.println("Close signal recieved");
                         client.close();
+                        client = null;
                     }
+
+                    System.out.println("Waiting for an input");
+                    System.out.println(inputBuffer.readLine());
 
                 }
 

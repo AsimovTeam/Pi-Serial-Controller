@@ -24,10 +24,27 @@ public class Main {
             //  Écoute de connexion des clients
             try {
 
-                //Si le serveur reçoit une connexion, il la ferme et écrit le message de succès
+                //Si le serveur reçoit une connexion, écouter la conversation
                 client = server.accept();
-                System.out.println("Someone connected!");
-                client.close();
+                System.out.println("Connection established");
+
+                BufferedReader inputBuffer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                System.out.println("Read buffer initalized");
+
+                while(client.isConnected()) {
+
+                    System.out.println("Waiting for an input");
+                    System.out.println(inputBuffer.readLine());
+
+                    //Dans l'éventualité que le client ferme le serveur textuellement
+                    if(inputBuffer.readLine().equals("close")) {
+
+                        client.close();
+                    }
+
+                }
+
+                //Si la connection a été fermée, marquer l'objet pour le garbage collector
                 client = null;
 
             } catch (IOException e) {
